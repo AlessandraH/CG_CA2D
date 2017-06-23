@@ -67,7 +67,7 @@ public class CA2D extends ApplicationAdapter implements ApplicationListener {
 
     @Override
     public void render() {
-        Gdx.gl.glClearColor(1, 0, 0, 1);
+        Gdx.gl.glClearColor(0.5f, 0.5f, 0.5f, 0);
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 
         stage.act();
@@ -94,10 +94,10 @@ public class CA2D extends ApplicationAdapter implements ApplicationListener {
 
     void criaObjetosTeste() {
         Float[][] line = new Float[2][2];
-        line[0][0] = 100f;
-        line[0][1] = 300f;
-        line[1][0] = 100f;
-        line[1][1] = 300f;
+        line[0][0] = 0f;
+        line[0][1] = 200f;
+        line[1][0] = 0f;
+        line[1][1] = 110f;
         objetos.add(line);
 
         Float[][] triangle = new Float[2][3];
