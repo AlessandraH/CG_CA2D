@@ -18,7 +18,7 @@ public abstract class Figura {
         this.desenho = n;
     }
 
-    public abstract Float[][] preencheCoordenadas(float x1, float y1, float x2, float y2);
+    public abstract Float[][] preencheCoordenadas(Float[][] coordenadas, float x, float y);
 
     public Float[][] multiplicacaoMatrizes(Float[][] a, Float[][] b) {
         Float[][] matriz = new Float[3][b[0].length];

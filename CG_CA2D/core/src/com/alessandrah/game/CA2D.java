@@ -56,7 +56,6 @@ public class CA2D extends ApplicationAdapter implements ApplicationListener {
                     contaCliques = 0;
                     coordenadas = new Float[2][2];
                 }
-
                 return true;
             }
         });
@@ -112,7 +111,7 @@ public class CA2D extends ApplicationAdapter implements ApplicationListener {
     }
 
     void exibeObjetos() {
-        if (objetos.size() > 0)
+        if (objetos.size() > 0) {
             for (Float[][] obj : objetos) {
                 switch (obj[0].length) {
                     case 2: //linha ou circulo
@@ -127,6 +126,7 @@ public class CA2D extends ApplicationAdapter implements ApplicationListener {
                         break;
                 }
             }
-    }
 
+        }
+    }
 }
