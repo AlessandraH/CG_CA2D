@@ -25,8 +25,10 @@ public class CA2D extends ApplicationAdapter implements ApplicationListener {
     ArrayList<Figura> objetos = new ArrayList<Figura>();
     ShapeRenderer renderizador;
     int clique = 0;
-    boolean desenhandoLinha, desenhandoCirculo, desenhandoTriangulo, desenhandoQuadrilatero;
+    boolean desenhando;
     boolean transladando, rotacionando, mudandoEscala;
+
+    Figura figura;
 
     @Override
     public void create() {
@@ -35,10 +37,6 @@ public class CA2D extends ApplicationAdapter implements ApplicationListener {
         coordenadas = new Float[2][2]; //tô criando aqui só pra tu ter um exemplo de pegar clique
         //quando for fazer de verdade, vai precisar de alguma forma de saber qual figura tu quer criar
         //ai da um new Float do tamanho que vai precisar
-
-        final Figura triangulo = new Figura(1);
-        System.out.println(triangulo.getDesenho());
-
 
         camera = new OrthographicCamera(Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
         camera.setToOrtho(false);
@@ -54,22 +52,11 @@ public class CA2D extends ApplicationAdapter implements ApplicationListener {
             public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
                 System.out.println("Você clicou em ["+x+"]["+y+"]");
 
-                triangulo.setCoordenadas(clique,x,y);
-                clique++;
-                if(clique==triangulo.coordenadas.length) {
-                    objetos.add(triangulo);
-                    clique = 0;
+                if(desenhando) {
+                    figura.setCoordenadas(clique,x,y);
+                    clique = incrementaClique(figura,objetos,clique);
                 }
 
-                /*
-                coordenadas[0][contaCliques] = x;
-                coordenadas[1][contaCliques] = y;
-                contaCliques++;
-                if(contaCliques == 2 ){
-                    objetos.add(coordenadas);
-                    contaCliques = 0;
-                    coordenadas = new Float[2][2];
-                } */
                 return true;
             }
         });
@@ -80,7 +67,6 @@ public class CA2D extends ApplicationAdapter implements ApplicationListener {
         Gdx.gl.glClearColor(0.5f, 0.5f, 0.5f, 0);
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 
-        inicializaDesenhando();
         verificaTeclaPressionada();
 
         stage.act();
@@ -108,10 +94,7 @@ public class CA2D extends ApplicationAdapter implements ApplicationListener {
     }
 
     public void inicializaDesenhando() {
-        desenhandoCirculo = false;
-        desenhandoLinha = false;
-        desenhandoTriangulo = false;
-        desenhandoQuadrilatero = false;
+        desenhando = false;
     }
 
     public void inicializaTransformacoes() {
@@ -120,27 +103,37 @@ public class CA2D extends ApplicationAdapter implements ApplicationListener {
         mudandoEscala = false;
     }
 
+    public int incrementaClique(Figura figura, ArrayList<Figura> objetos, int clique) {
+        clique++;
+        if(clique==figura.coordenadas[0].length) {
+            objetos.add(figura);
+            clique = 0;
+            inicializaDesenhando();
+        }
+        return clique;
+    }
+
     public void verificaTeclaPressionada() {
-        if(!desenhandoCirculo && !desenhandoLinha && !desenhandoTriangulo && !desenhandoQuadrilatero) {
+        if(!desenhando) {
             if(Gdx.input.isKeyJustPressed(Input.Keys.NUM_1)) {
                 System.out.println("Você pressionou 1");
-                desenhandoCirculo = true;
-                Circulo circulo = new Circulo(1);
+                desenhando = true;
+                figura = new Circulo(1);
             }
             else if(Gdx.input.isKeyJustPressed(Input.Keys.NUM_2)) {
                 System.out.println("Você pressionou 2");
-                desenhandoLinha = true;
-                Figura linha = new Figura(2);
+                desenhando = true;
+                figura = new Figura(2);
             }
             else if(Gdx.input.isKeyJustPressed(Input.Keys.NUM_3)) {
                 System.out.println("Você pressionou 3");
-                desenhandoTriangulo = true;
-                Figura triangulo = new Figura(3);
+                desenhando = true;
+                figura = new Figura(3);
             }
             else if(Gdx.input.isKeyJustPressed(Input.Keys.NUM_4)) {
                 System.out.println("Você pressionou 4");
-                desenhandoTriangulo = true;
-                Figura quadrilatero = new Figura(4);
+                desenhando = true;
+                figura = new Figura(4);
             }
         }
         else if(Gdx.input.isKeyJustPressed(Input.Keys.ESCAPE)) {
