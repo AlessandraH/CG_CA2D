@@ -15,6 +15,7 @@ import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.utils.viewport.ScreenViewport;
 
 import java.util.ArrayList;
+import java.util.Scanner;
 
 public class CA2D extends ApplicationAdapter implements ApplicationListener {
     SpriteBatch batch;
@@ -25,7 +26,7 @@ public class CA2D extends ApplicationAdapter implements ApplicationListener {
     ArrayList<Figura> objetos = new ArrayList<Figura>();
     ShapeRenderer renderizador;
     int clique = 0;
-    boolean desenhando;
+    boolean desenhando, deletando;
     boolean transladando, rotacionando, mudandoEscala;
 
     Figura figura;
@@ -95,6 +96,7 @@ public class CA2D extends ApplicationAdapter implements ApplicationListener {
 
     public void inicializaDesenhando() {
         desenhando = false;
+        deletando = false;
     }
 
     public void inicializaTransformacoes() {
@@ -114,7 +116,7 @@ public class CA2D extends ApplicationAdapter implements ApplicationListener {
     }
 
     public void verificaTeclaPressionada() {
-        if(!desenhando) {
+        if(!desenhando && !deletando) {
             if(Gdx.input.isKeyJustPressed(Input.Keys.NUM_1)) {
                 System.out.println("Você pressionou 1");
                 desenhando = true;
@@ -135,11 +137,75 @@ public class CA2D extends ApplicationAdapter implements ApplicationListener {
                 desenhando = true;
                 figura = new Figura(4);
             }
+            else if(Gdx.input.isKeyJustPressed(Input.Keys.BACKSPACE)) {
+                System.out.println("Você pressionou Del");
+                deletando = true;
+                int indice;
+                indice = exibeListaObjetos();
+                if(indice==0)
+                    objetos.clear();
+                else
+                    objetos.remove(indice);
+            }
         }
         else if(Gdx.input.isKeyJustPressed(Input.Keys.ESCAPE)) {
             System.out.println("Você pressionou Esc");
             inicializaDesenhando();
         }
+
+    }
+
+    public int exibeListaObjetos() {
+        int i = 0;
+        String opcao;
+        for(Figura obj : objetos) {
+            opcao = "";
+            i++;
+            opcao += i + " - ";
+            switch (obj.desenho) {
+                case 1:
+                    opcao += "Círculo de centro ["
+                            + obj.coordenadas[0][0] + "]["
+                            + obj.coordenadas[1][0] + "] e raio ["
+                            + obj.coordenadas[0][1] +  "];";
+                    break;
+                case 2:
+                    opcao += "Linha de coordenadas ["
+                            + obj.coordenadas[0][0] + "]["
+                            + obj.coordenadas[1][0] + "] e ["
+                            + obj.coordenadas[0][1] + "]["
+                            + obj.coordenadas[1][1] + "];";
+                    break;
+                case 3:
+                    opcao += "Triângulo de coordenadas ["
+                            + obj.coordenadas[0][0] + "]["
+                            + obj.coordenadas[1][0] + "], ["
+                            + obj.coordenadas[0][1] + "]["
+                            + obj.coordenadas[1][1] + "] e ["
+                            + obj.coordenadas[0][2] + "]["
+                            + obj.coordenadas[1][2] + "];";
+                    break;
+                case 4:
+                    opcao += "Quadrilátero de coordenadas ["
+                            + obj.coordenadas[0][0] + "]["
+                            + obj.coordenadas[1][0] + "], ["
+                            + obj.coordenadas[0][1] + "]["
+                            + obj.coordenadas[1][1] + "], ["
+                            + obj.coordenadas[0][2] + "]["
+                            + obj.coordenadas[1][2] + "] e ["
+                            + obj.coordenadas[0][3] + "]["
+                            + obj.coordenadas[1][3] + "];";
+                    break;
+            }
+            System.out.println(opcao);
+        }
+        System.out.println("0 - Todos os objetos.");
+        System.out.println("Digite o número que corresponde ao objeto a ser selecionado: ");
+        Scanner sc = new Scanner(System.in);
+        int indice;
+        sc.nextLine();
+        indice = sc.nextInt();
+        return indice;
     }
 
     public void exibeObjetos() {
