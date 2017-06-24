@@ -25,6 +25,7 @@ public class CA2D extends ApplicationAdapter implements ApplicationListener {
     ArrayList<Float[][]> objetos = new ArrayList<Float[][]>();
     ShapeRenderer renderizador;
     int contaCliques = 0;
+    int clique = 0;
 
     @Override
     public void create() {
@@ -33,6 +34,10 @@ public class CA2D extends ApplicationAdapter implements ApplicationListener {
         coordenadas = new Float[2][2]; //tô criando aqui só pra tu ter um exemplo de pegar clique
         //quando for fazer de verdade, vai precisar de alguma forma de saber qual figura tu quer criar
         //ai da um new Float do tamanho que vai precisar
+
+        final Triangulo triangulo = new Triangulo(3);
+        System.out.println(triangulo.getDesenho());
+
 
         camera = new OrthographicCamera(Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
         camera.setToOrtho(false);
@@ -48,6 +53,14 @@ public class CA2D extends ApplicationAdapter implements ApplicationListener {
             public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
                 System.out.println("Você clicou em ["+x+"]["+y+"]");
 
+                triangulo.setCoordenadas(clique,x,y);
+                clique++;
+                if(clique==triangulo.getDesenho()) {
+                    objetos.add(triangulo.getCoordenadas());
+                    clique = 0;
+                }
+
+                /*
                 coordenadas[0][contaCliques] = x;
                 coordenadas[1][contaCliques] = y;
                 contaCliques++;
@@ -55,7 +68,7 @@ public class CA2D extends ApplicationAdapter implements ApplicationListener {
                     objetos.add(coordenadas);
                     contaCliques = 0;
                     coordenadas = new Float[2][2];
-                }
+                } */
                 return true;
             }
         });

@@ -18,6 +18,19 @@ public abstract class Figura {
         this.desenho = n;
     }
 
+    public void setCoordenadas(int clique, float x, float y) {
+        this.coordenadas[0][clique] = x;
+        this.coordenadas[1][clique] = y;
+    }
+
+    public int getDesenho() {
+        return this.desenho;
+    }
+
+    public Float[][] getCoordenadas() {
+        return this.coordenadas;
+    }
+
     public abstract Float[][] preencheCoordenadas(Float[][] coordenadas, float x, float y);
 
     public Float[][] multiplicacaoMatrizes(Float[][] a, Float[][] b) {
@@ -36,7 +49,7 @@ public abstract class Figura {
         return matriz;
     }
 
-    public Float[][] transformarEmCoordenadasHomogeneas (Float[][] coordenadas) {
+    public Float[][] transformarEmCoordenadasHomogeneas(Float[][] coordenadas) {
         Float[][] coordenadasHomogeneas = new Float[3][coordenadas[0].length];
         System.arraycopy(coordenadas, 0, coordenadasHomogeneas, 0, coordenadas.length);
         for(int i=0; i<coordenadasHomogeneas[0].length; i++) {
@@ -45,11 +58,21 @@ public abstract class Figura {
         return coordenadasHomogeneas;
     }
 
-    public Float[][] rotacionar(Float[][] matrizObjetoHomogeneo, float angulo) {
+    public Float[][] rotacionarOrigem(Float[][] matrizObjetoHomogeneo, float angulo) {
         double anguloRadiano = (Math.PI/180) * angulo;
         Float[][] matrizRotacao = {
                 {(float)Math.cos(anguloRadiano), (float)-Math.sin(anguloRadiano), 0f},
                 {(float)Math.sin(anguloRadiano), (float)Math.cos(anguloRadiano), 0f},
+                {0f, 0f, 1f}
+        };
+        return multiplicacaoMatrizes(matrizRotacao, matrizObjetoHomogeneo);
+    }
+
+    public Float[][] rotacionar(Float[][] matrizObjetoHomogeneo, float angulo, float x, float y) {
+        double anguloRadiano = (Math.PI/180) * angulo;
+        Float[][] matrizRotacao = {
+                {(float)Math.cos(anguloRadiano), (float)-Math.sin(anguloRadiano), (float)(y*Math.sin(anguloRadiano)-x*Math.cos(anguloRadiano))},
+                {(float)Math.sin(anguloRadiano), (float)Math.cos(anguloRadiano), (float)(-x*Math.sin(anguloRadiano)-y*Math.cos(anguloRadiano))},
                 {0f, 0f, 1f}
         };
         return multiplicacaoMatrizes(matrizRotacao, matrizObjetoHomogeneo);
@@ -64,10 +87,19 @@ public abstract class Figura {
         return multiplicacaoMatrizes(matrizTranslacao, matrizObjetoHomogeneo);
     }
 
-    public Float[][] mudarEscala(Float[][] matrizObjetoHomogeneo, float sx, float sy) {
+    public Float[][] mudarEscalaOrigem(Float[][] matrizObjetoHomogeneo, float sx, float sy) {
         Float[][] matrizMudancaEscala = {
                 {sx, 0f, 0f},
                 {0f, sy, 0f},
+                {0f, 0f, 1f}
+        };
+        return multiplicacaoMatrizes(matrizMudancaEscala, matrizObjetoHomogeneo);
+    }
+
+    public Float[][] mudarEscala(Float[][] matrizObjetoHomogeneo, float sx, float sy, float x, float y) {
+        Float[][] matrizMudancaEscala = {
+                {sx, 0f, x-x*sx},
+                {0f, sy, y-y*sy},
                 {0f, 0f, 1f}
         };
         return multiplicacaoMatrizes(matrizMudancaEscala, matrizObjetoHomogeneo);
