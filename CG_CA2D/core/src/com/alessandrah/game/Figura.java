@@ -3,16 +3,16 @@ package com.alessandrah.game;
 /**
  * Created by Alessandra on 23/06/2017.
  */
-public abstract class Figura {
+public class Figura {
 
-    private Float[][] coordenadas;
-    private int desenho;
+    protected Float[][] coordenadas;
+    protected int desenho;
 
     public Figura(int n) {
         if(n > 2) {
             this.coordenadas = new Float[2][n];
         }
-        else {
+        else { //circulo ou linha
             this.coordenadas = new Float[2][2];
         }
         this.desenho = n;
@@ -30,8 +30,6 @@ public abstract class Figura {
     public Float[][] getCoordenadas() {
         return this.coordenadas;
     }
-
-    public abstract Float[][] preencheCoordenadas(Float[][] coordenadas, float x, float y);
 
     public Float[][] multiplicacaoMatrizes(Float[][] a, Float[][] b) {
         Float[][] matriz = new Float[3][b[0].length];

@@ -7,6 +7,7 @@ import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
+import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
@@ -17,15 +18,15 @@ import java.util.ArrayList;
 
 public class CA2D extends ApplicationAdapter implements ApplicationListener {
     SpriteBatch batch;
-    //Texture img;
     OrthographicCamera camera;
     Stage stage;
     TextButton botao;
     Float[][] coordenadas;
-    ArrayList<Float[][]> objetos = new ArrayList<Float[][]>();
+    ArrayList<Figura> objetos = new ArrayList<Figura>();
     ShapeRenderer renderizador;
-    int contaCliques = 0;
     int clique = 0;
+    boolean desenhandoLinha, desenhandoCirculo, desenhandoTriangulo, desenhandoQuadrilatero;
+    boolean transladando, rotacionando, mudandoEscala;
 
     @Override
     public void create() {
@@ -35,7 +36,7 @@ public class CA2D extends ApplicationAdapter implements ApplicationListener {
         //quando for fazer de verdade, vai precisar de alguma forma de saber qual figura tu quer criar
         //ai da um new Float do tamanho que vai precisar
 
-        final Triangulo triangulo = new Triangulo(3);
+        final Figura triangulo = new Figura(1);
         System.out.println(triangulo.getDesenho());
 
 
@@ -55,8 +56,8 @@ public class CA2D extends ApplicationAdapter implements ApplicationListener {
 
                 triangulo.setCoordenadas(clique,x,y);
                 clique++;
-                if(clique==triangulo.getDesenho()) {
-                    objetos.add(triangulo.getCoordenadas());
+                if(clique==triangulo.coordenadas.length) {
+                    objetos.add(triangulo);
                     clique = 0;
                 }
 
@@ -72,9 +73,6 @@ public class CA2D extends ApplicationAdapter implements ApplicationListener {
                 return true;
             }
         });
-
-        criaObjetosTeste();
-
     }
 
     @Override
@@ -82,9 +80,11 @@ public class CA2D extends ApplicationAdapter implements ApplicationListener {
         Gdx.gl.glClearColor(0.5f, 0.5f, 0.5f, 0);
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 
+        inicializaDesenhando();
+        verificaTeclaPressionada();
+
         stage.act();
         stage.draw();
-
 
         renderizador.setProjectionMatrix(camera.combined);
         renderizador.begin(ShapeRenderer.ShapeType.Line);
@@ -93,53 +93,81 @@ public class CA2D extends ApplicationAdapter implements ApplicationListener {
         renderizador.end();
 
         batch.begin();
-        //batch.draw(img, 0, 0);
         batch.end();
     }
 
     @Override
     public void dispose() {
         batch.dispose();
-        //img.dispose();
     }
 
-
-    void criaObjetosTeste() {
-        Float[][] line = new Float[2][2];
-        line[0][0] = 0f;
-        line[0][1] = 200f;
-        line[1][0] = 0f;
-        line[1][1] = 110f;
-        objetos.add(line);
-
-        Float[][] triangle = new Float[2][3];
-        triangle[0][0] = 200f;
-        triangle[1][0] = 100f;
-        triangle[0][1] = 400f;
-        triangle[1][1] = 250f;
-        triangle[0][2] = 550f;
-        triangle[1][2] = 500f;
-        objetos.add(triangle);
-
+    @Override
+    public void resize(int width, int height) {
+        camera.position.set(new Vector3(width / 2, height / 2, 0f));
+        stage.getViewport().update(width, height);
     }
 
-    void exibeObjetos() {
+    public void inicializaDesenhando() {
+        desenhandoCirculo = false;
+        desenhandoLinha = false;
+        desenhandoTriangulo = false;
+        desenhandoQuadrilatero = false;
+    }
+
+    public void inicializaTransformacoes() {
+        rotacionando = false;
+        transladando = false;
+        mudandoEscala = false;
+    }
+
+    public void verificaTeclaPressionada() {
+        if(!desenhandoCirculo && !desenhandoLinha && !desenhandoTriangulo && !desenhandoQuadrilatero) {
+            if(Gdx.input.isKeyJustPressed(Input.Keys.NUM_1)) {
+                System.out.println("Você pressionou 1");
+                desenhandoCirculo = true;
+                Circulo circulo = new Circulo(1);
+            }
+            else if(Gdx.input.isKeyJustPressed(Input.Keys.NUM_2)) {
+                System.out.println("Você pressionou 2");
+                desenhandoLinha = true;
+                Figura linha = new Figura(2);
+            }
+            else if(Gdx.input.isKeyJustPressed(Input.Keys.NUM_3)) {
+                System.out.println("Você pressionou 3");
+                desenhandoTriangulo = true;
+                Figura triangulo = new Figura(3);
+            }
+            else if(Gdx.input.isKeyJustPressed(Input.Keys.NUM_4)) {
+                System.out.println("Você pressionou 4");
+                desenhandoTriangulo = true;
+                Figura quadrilatero = new Figura(4);
+            }
+        }
+        else if(Gdx.input.isKeyJustPressed(Input.Keys.ESCAPE)) {
+            System.out.println("Você pressionou Esc");
+            inicializaDesenhando();
+        }
+    }
+
+    public void exibeObjetos() {
         if (objetos.size() > 0) {
-            for (Float[][] obj : objetos) {
-                switch (obj[0].length) {
-                    case 2: //linha ou circulo
-                        renderizador.line(obj[0][0], obj[1][0], obj[0][1], obj[1][1]);
+            for (Figura obj : objetos) {
+                switch (obj.desenho) {
+                    case 1: //circulo
+                        renderizador.circle(obj.coordenadas[0][0], obj.coordenadas[1][0], obj.coordenadas[0][1], 256);
+                        break;
+                    case 2: //linha
+                        renderizador.line(obj.coordenadas[0][0], obj.coordenadas[1][0], obj.coordenadas[0][1], obj.coordenadas[1][1]);
                         break;
                     case 3: //triangulo
-                        renderizador.triangle(obj[0][0], obj[1][0], obj[0][1], obj[1][1], obj[0][2], obj[1][2]);
+                        renderizador.triangle(obj.coordenadas[0][0], obj.coordenadas[1][0], obj.coordenadas[0][1], obj.coordenadas[1][1], obj.coordenadas[0][2], obj.coordenadas[1][2]);
                         break;
                     case 4: //quadrilatero
-                        float[] auxiliar = {obj[0][0], obj[1][0], obj[0][1], obj[1][1], obj[0][2], obj[1][2], obj[0][3], obj[1][3]};
+                        float[] auxiliar = {obj.coordenadas[0][0], obj.coordenadas[1][0], obj.coordenadas[0][1], obj.coordenadas[1][1], obj.coordenadas[0][2], obj.coordenadas[1][2], obj.coordenadas[0][3], obj.coordenadas[1][3]};
                         renderizador.polygon(auxiliar);
                         break;
                 }
             }
-
         }
     }
 }
