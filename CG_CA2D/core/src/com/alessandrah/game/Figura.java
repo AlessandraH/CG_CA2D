@@ -103,7 +103,4 @@ public class Figura {
         return multiplicacaoMatrizes(matrizMudancaEscala, matrizObjetoHomogeneo);
     }
 
-    public void excluirFigura() {
-
-    }
 }

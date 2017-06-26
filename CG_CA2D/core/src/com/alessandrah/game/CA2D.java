@@ -25,8 +25,8 @@ public class CA2D extends ApplicationAdapter implements ApplicationListener {
     ArrayList<Figura> objetos = new ArrayList<Figura>();
     ShapeRenderer renderizador;
     int clique = 0;
-    boolean desenhando, deletando;
-    boolean transladando, rotacionando, mudandoEscala;
+    boolean desenhando = false, deletando = false, terminal = false;
+    boolean transladando = false, rotacionando = false, mudandoEscala = false;
 
     Figura figura;
 
@@ -50,7 +50,7 @@ public class CA2D extends ApplicationAdapter implements ApplicationListener {
         stage.addListener(new ClickListener(Input.Buttons.LEFT) {
             @Override
             public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
-                System.out.println("Você clicou em ["+x+"]["+y+"]");
+                System.out.println("Você clicou em [" + x + "][" + y + "]");
 
                 if(desenhando) {
                     figura.setCoordenadas(clique,x,y);
@@ -93,29 +93,28 @@ public class CA2D extends ApplicationAdapter implements ApplicationListener {
         stage.getViewport().update(width, height);
     }
 
-    public void inicializaDesenhando() {
+    public void inicializaVariaveis() {
         desenhando = false;
         deletando = false;
-    }
-
-    public void inicializaTransformacoes() {
         rotacionando = false;
         transladando = false;
         mudandoEscala = false;
+        terminal = false;
     }
+
 
     public int incrementaClique(Figura figura, ArrayList<Figura> objetos, int clique) {
         clique++;
         if(clique==figura.coordenadas[0].length) {
             objetos.add(figura);
             clique = 0;
-            inicializaDesenhando();
+            inicializaVariaveis();
         }
         return clique;
     }
 
     public void verificaTeclaPressionada() {
-        if(!desenhando && !deletando) {
+        if(!(desenhando||deletando||rotacionando||mudandoEscala||transladando)) {
             if(Gdx.input.isKeyJustPressed(Input.Keys.NUM_1)) {
                 System.out.println("Você pressionou 1");
                 desenhando = true;
@@ -140,18 +139,38 @@ public class CA2D extends ApplicationAdapter implements ApplicationListener {
                 System.out.println("Você pressionou Del");
                 deletando = true;
                 int indice;
+                //exibeListaObjetos();
                 indice = 0;
                 if(indice==0)
                     objetos.clear();
                 else
                     objetos.remove(indice-1);
             }
+            else if(Gdx.input.isKeyJustPressed(Input.Keys.NUM_0)) {
+                System.out.println("Você pressionou delete");
+                deletando = true;
+                // clear
+            }
+            else if(Gdx.input.isKeyJustPressed(Input.Keys.F1)) {
+                System.out.println("Você escolheu mudar de escala");
+                mudandoEscala = true;
+                //mudança de escala
+            }
+            else if(Gdx.input.isKeyJustPressed(Input.Keys.F2)) {
+                System.out.println("Você escolheu rotacionar");
+                rotacionando = true;
+                //rotação
+            }
+            else if(Gdx.input.isKeyJustPressed(Input.Keys.F3)) {
+                System.out.println("Você escolheu transladar");
+                transladando = true;
+                //transalação
+            }
         }
         else if(Gdx.input.isKeyJustPressed(Input.Keys.ESCAPE)) {
             System.out.println("Você pressionou Esc");
-            inicializaDesenhando();
+            inicializaVariaveis();
         }
-
     }
 
     public void exibeListaObjetos() {
