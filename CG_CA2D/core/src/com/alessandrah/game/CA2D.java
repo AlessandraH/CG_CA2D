@@ -149,7 +149,8 @@ public class CA2D extends ApplicationAdapter implements ApplicationListener {
             else if(Gdx.input.isKeyJustPressed(Input.Keys.NUM_0)) {
                 System.out.println("Você pressionou delete");
                 deletando = true;
-                // clear
+                objetos.clear();
+                inicializaVariaveis();
             }
             else if(Gdx.input.isKeyJustPressed(Input.Keys.F1)) {
                 System.out.println("Você escolheu mudar de escala");
