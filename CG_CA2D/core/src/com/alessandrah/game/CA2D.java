@@ -141,11 +141,11 @@ public class CA2D extends ApplicationAdapter implements ApplicationListener {
                 System.out.println("Você pressionou Del");
                 deletando = true;
                 int indice;
-                indice = exibeListaObjetos();
+                indice = 0;
                 if(indice==0)
                     objetos.clear();
                 else
-                    objetos.remove(indice);
+                    objetos.remove(indice-1);
             }
         }
         else if(Gdx.input.isKeyJustPressed(Input.Keys.ESCAPE)) {
@@ -155,7 +155,7 @@ public class CA2D extends ApplicationAdapter implements ApplicationListener {
 
     }
 
-    public int exibeListaObjetos() {
+    public void exibeListaObjetos() {
         int i = 0;
         String opcao;
         for(Figura obj : objetos) {
@@ -201,11 +201,6 @@ public class CA2D extends ApplicationAdapter implements ApplicationListener {
         }
         System.out.println("0 - Todos os objetos.");
         System.out.println("Digite o número que corresponde ao objeto a ser selecionado: ");
-        Scanner sc = new Scanner(System.in);
-        int indice;
-        sc.nextLine();
-        indice = sc.nextInt();
-        return indice;
     }
 
     public void exibeObjetos() {
