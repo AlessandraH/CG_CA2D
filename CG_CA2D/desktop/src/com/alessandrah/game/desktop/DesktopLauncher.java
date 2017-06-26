@@ -7,7 +7,7 @@ import com.alessandrah.game.CA2D;
 public class DesktopLauncher {
 	public static void main (String[] arg) {
 		LwjglApplicationConfiguration config = new LwjglApplicationConfiguration();
-		config.height = 400;
+		config.height = 700;
 		config.width = 1300;
 		new LwjglApplication(new CA2D(), config);
 	}

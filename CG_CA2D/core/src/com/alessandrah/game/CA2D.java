@@ -15,7 +15,6 @@ import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.utils.viewport.ScreenViewport;
 
 import java.util.ArrayList;
-import java.util.Scanner;
 
 public class CA2D extends ApplicationAdapter implements ApplicationListener {
     SpriteBatch batch;
