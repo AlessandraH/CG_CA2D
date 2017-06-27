@@ -19,4 +19,38 @@ public class Circulo extends Figura {
             this.coordenadas[1][1] = null;
         }
     }
+
+    @Override
+    public Figura rotacionar(Figura figuraTransformada, float angulo, float x, float y) {
+        double anguloRadiano = (Math.PI/180) * angulo;
+        Float[][] matrizRotacao = {
+                {(float)Math.cos(anguloRadiano), (float)-Math.sin(anguloRadiano), (float)(y*Math.sin(anguloRadiano)-x*Math.cos(anguloRadiano))},
+                {(float)Math.sin(anguloRadiano), (float)Math.cos(anguloRadiano), (float)(-x*Math.sin(anguloRadiano)-y*Math.cos(anguloRadiano))},
+                {0f, 0f, 1f}
+        };
+        figuraTransformada.coordenadas = multiplicacaoMatrizes(matrizRotacao, figuraTransformada.coordenadas);
+        return figuraTransformada;
+    }
+
+    @Override
+    public Figura transladar(Figura figuraTransformada, float dx, float dy) {
+        Float[][] matrizTranslacao = {
+                {1f, 0f, dx},
+                {0f, 1f, dy},
+                {0f, 0f, 1f}
+        };
+        figuraTransformada.coordenadas = multiplicacaoMatrizes(matrizTranslacao, figuraTransformada.coordenadas);
+        return figuraTransformada;
+    }
+
+    @Override
+    public Figura mudarEscala(Figura figuraTransformada, float sx, float sy, float x, float y) {
+        Float[][] matrizMudancaEscala = {
+                {sx, 0f, x-x*sx},
+                {0f, sy, y-y*sy},
+                {0f, 0f, 1f}
+        };
+        figuraTransformada.coordenadas = multiplicacaoMatrizes(matrizMudancaEscala, figuraTransformada.coordenadas);
+        return figuraTransformada;
+    }
 }
