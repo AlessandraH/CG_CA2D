@@ -12,7 +12,6 @@ import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.InputListener;
 import com.badlogic.gdx.scenes.scene2d.Stage;
-import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.utils.viewport.ScreenViewport;
 
@@ -22,27 +21,25 @@ public class CA2D extends ApplicationAdapter implements ApplicationListener {
     SpriteBatch batch;
     OrthographicCamera camera;
     Stage stage;
-    TextButton botao;
-    Float[][] coordenadas;
     ArrayList<Figura> objetos = new ArrayList<Figura>();
     ShapeRenderer renderizador;
-    int clique = 0;
-    boolean desenhando = false, deletando = false, terminal = false;
-    boolean transladando = false, rotacionando = false, mudandoEscala = false;
-    String text = "", terminalmsg = "", batata = "";
+    int clique = 0, indice = -1;
+    boolean desenhando = false, deletando = false,
+            terminal = false, transladando = false,
+            rotacionando = false, mudandoEscala = false,
+            pegandoCoordenadas = false;
+    String text = "", terminalmsg = "";
     BitmapFont fonte;
 
-    Figura figura;
+    float angulo, s;
+
+    Figura figura, figuraTransformar;
 
     @Override
     public void create() {
         renderizador = new ShapeRenderer();
         fonte = new BitmapFont();
         fonte.setColor(1f, 1f, 1f, 1f);
-
-        coordenadas = new Float[2][2]; //tô criando aqui só pra tu ter um exemplo de pegar clique
-        //quando for fazer de verdade, vai precisar de alguma forma de saber qual figura tu quer criar
-        //ai da um new Float do tamanho que vai precisar
 
         camera = new OrthographicCamera(Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
         camera.setToOrtho(false);
@@ -82,8 +79,34 @@ public class CA2D extends ApplicationAdapter implements ApplicationListener {
                 if (desenhando) {
                     figura.setCoordenadas(clique, x, y);
                     clique = incrementaClique(figura, objetos, clique);
-                }
+                } else if (rotacionando && !pegandoCoordenadas) {
+                    if (figuraTransformar.desenho == 1) {
 
+                    } else {
+                        figuraTransformar = figuraTransformar.transformarEmCoordenadasHomogeneas(figuraTransformar);
+                        figuraTransformar = figuraTransformar.rotacionar(figuraTransformar, angulo, x, y);
+                    }
+                    objetos.add(figuraTransformar);
+                    inicializaVariaveis();
+                } else if (mudandoEscala && !pegandoCoordenadas) {
+                    if (figuraTransformar.desenho == 1) {
+
+                    } else {
+                        figuraTransformar = figuraTransformar.transformarEmCoordenadasHomogeneas(figuraTransformar);
+                        figuraTransformar = figuraTransformar.mudarEscala(figuraTransformar, s, s, x, y);
+                    }
+                    objetos.add(figuraTransformar);
+                    inicializaVariaveis();
+                } else if (transladando) {
+                    if (figuraTransformar.desenho == 1) {
+
+                    } else {
+                        figuraTransformar = figuraTransformar.transformarEmCoordenadasHomogeneas(figuraTransformar);
+                        figuraTransformar = figuraTransformar.transladar(figuraTransformar, x - figuraTransformar.coordenadas[0][0], y - figuraTransformar.coordenadas[1][0]);
+                    }
+                    objetos.add(figuraTransformar);
+                    inicializaVariaveis();
+                }
                 return true;
             }
         });
@@ -93,7 +116,6 @@ public class CA2D extends ApplicationAdapter implements ApplicationListener {
     public void render() {
         Gdx.gl.glClearColor(0.5f, 0.5f, 0.5f, 0);
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
-
 
         stage.act();
         stage.draw();
@@ -130,8 +152,10 @@ public class CA2D extends ApplicationAdapter implements ApplicationListener {
         transladando = false;
         mudandoEscala = false;
         terminal = false;
+        pegandoCoordenadas = false;
         text = "";
         terminalmsg = "";
+        indice = -1;
     }
 
 
@@ -150,10 +174,35 @@ public class CA2D extends ApplicationAdapter implements ApplicationListener {
         if (!terminal && Gdx.input.isKeyJustPressed(Input.Keys.ENTER)) {
             terminal = true;
         } else if (terminal && Gdx.input.isKeyJustPressed(Input.Keys.ENTER)) {
-            if(deletando){
-                objetos.remove(Integer.parseInt(text.trim())-1);
+            indice = Integer.parseInt(text.trim()) - 1;
+            if (deletando) {
+                objetos.remove(indice);
+                inicializaVariaveis();
+            } else if (pegandoCoordenadas) {
+                if (rotacionando) {
+                    angulo = Float.parseFloat(text.trim());
+                    terminal = false;
+                    pegandoCoordenadas = false;
+                } else if (mudandoEscala) {
+                    s = Float.parseFloat(text.trim());
+                    terminal = false;
+                    pegandoCoordenadas = false;
+                }
+            } else if (rotacionando || transladando || mudandoEscala) {
+                figuraTransformar = new Figura();
+                figuraTransformar = objetos.get(indice);
+                pegandoCoordenadas = true;
+                text = "";
+                if (rotacionando) {
+                    pegandoCoordenadas = true;
+                    terminalmsg = "Digite o angulo de rotação: ";
+                    fonte.draw(batch, terminalmsg, 0, 250);
+                } else if (mudandoEscala) {
+                    pegandoCoordenadas = true;
+                    terminalmsg = "Digite o valor de escala: ";
+                    fonte.draw(batch, terminalmsg, 0, 250);
+                }
             }
-            inicializaVariaveis();
         }
 
         if (!(desenhando || deletando || rotacionando || mudandoEscala || transladando)) {
@@ -178,9 +227,7 @@ public class CA2D extends ApplicationAdapter implements ApplicationListener {
                 if (objetos.size() > 0) {
                     System.out.println("Você pressionou backspace");
                     deletando = true;
-                    int indice;
-                    terminalmsg = exibeListaObjetos();
-                    fonte.draw(batch, terminalmsg, 0, 250);
+                    exibeTerminal();
                 } else {
                     System.out.println("Não há objetos");
                 }
@@ -192,26 +239,26 @@ public class CA2D extends ApplicationAdapter implements ApplicationListener {
             } else if (Gdx.input.isKeyJustPressed(Input.Keys.F1)) {
                 System.out.println("Você escolheu mudar de escala");
                 mudandoEscala = true;
-                //mudança de escala
+                exibeTerminal();
             } else if (Gdx.input.isKeyJustPressed(Input.Keys.F2)) {
                 System.out.println("Você escolheu rotacionar");
                 rotacionando = true;
-                //rotação
-                Figura novo = new Figura();
-                novo = novo.transformarEmCoordenadasHomogeneas(objetos.get(objetos.size()-1));
-                novo = objetos.get(objetos.size()-1).rotacionar(novo, 1, 0,0);
-                objetos.add(novo);
-                inicializaVariaveis();
+                exibeTerminal();
             } else if (Gdx.input.isKeyJustPressed(Input.Keys.F3)) {
                 System.out.println("Você escolheu transladar");
                 transladando = true;
-                //translada
+                exibeTerminal();
             }
         }
         if (Gdx.input.isKeyJustPressed(Input.Keys.ESCAPE)) {
             System.out.println("Você pressionou Esc");
             inicializaVariaveis();
         }
+    }
+
+    public void exibeTerminal() {
+        terminalmsg = exibeListaObjetos();
+        fonte.draw(batch, terminalmsg, 0, 250);
     }
 
     public String exibeListaObjetos() {

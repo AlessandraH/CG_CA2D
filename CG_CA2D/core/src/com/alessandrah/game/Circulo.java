@@ -28,7 +28,7 @@ public class Circulo extends Figura {
                 {(float)Math.sin(anguloRadiano), (float)Math.cos(anguloRadiano), (float)(-x*Math.sin(anguloRadiano)-y*Math.cos(anguloRadiano))},
                 {0f, 0f, 1f}
         };
-        figuraTransformada.coordenadas = multiplicacaoMatrizes(matrizRotacao, figuraTransformada.coordenadas);
+        figuraTransformada.coordenadas = multiplicacaoMatrizes(matrizRotacao,figuraTransformada.coordenadas);
         return figuraTransformada;
     }
 
