@@ -81,7 +81,8 @@ public class CA2D extends ApplicationAdapter implements ApplicationListener {
                     clique = incrementaClique(figura, objetos, clique);
                 } else if (rotacionando && !pegandoCoordenadas) {
                     if (figuraTransformar.desenho == 1) {
-
+                        figuraTransformar = new Circulo(1).transformarEmCoordenadasHomogeneas(figuraTransformar);
+                        figuraTransformar = new Circulo(1).rotacionar(figuraTransformar,angulo,x,y);
                     } else {
                         figuraTransformar = figuraTransformar.transformarEmCoordenadasHomogeneas(figuraTransformar);
                         figuraTransformar = figuraTransformar.rotacionar(figuraTransformar, angulo, x, y);
@@ -90,7 +91,8 @@ public class CA2D extends ApplicationAdapter implements ApplicationListener {
                     inicializaVariaveis();
                 } else if (mudandoEscala && !pegandoCoordenadas) {
                     if (figuraTransformar.desenho == 1) {
-
+                        figuraTransformar = new Circulo(1).transformarEmCoordenadasHomogeneas(figuraTransformar);
+                        figuraTransformar = new Circulo(1).mudarEscala(figuraTransformar,s,s,x,y);
                     } else {
                         figuraTransformar = figuraTransformar.transformarEmCoordenadasHomogeneas(figuraTransformar);
                         figuraTransformar = figuraTransformar.mudarEscala(figuraTransformar, s, s, x, y);
@@ -99,7 +101,8 @@ public class CA2D extends ApplicationAdapter implements ApplicationListener {
                     inicializaVariaveis();
                 } else if (transladando) {
                     if (figuraTransformar.desenho == 1) {
-
+                        figuraTransformar = new Circulo(1).transformarEmCoordenadasHomogeneas(figuraTransformar);
+                        figuraTransformar = new Circulo(1).transladar(figuraTransformar,x,y);
                     } else {
                         figuraTransformar = figuraTransformar.transformarEmCoordenadasHomogeneas(figuraTransformar);
                         figuraTransformar = figuraTransformar.transladar(figuraTransformar, x - figuraTransformar.coordenadas[0][0], y - figuraTransformar.coordenadas[1][0]);

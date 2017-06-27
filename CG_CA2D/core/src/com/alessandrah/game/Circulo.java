@@ -28,7 +28,13 @@ public class Circulo extends Figura {
                 {(float)Math.sin(anguloRadiano), (float)Math.cos(anguloRadiano), (float)(-x*Math.sin(anguloRadiano)-y*Math.cos(anguloRadiano))},
                 {0f, 0f, 1f}
         };
-        figuraTransformada.coordenadas = multiplicacaoMatrizes(matrizRotacao,figuraTransformada.coordenadas);
+        Float[][] centroCirculo = {
+                {figuraTransformada.coordenadas[0][0]},
+                {figuraTransformada.coordenadas[1][0]},
+                {figuraTransformada.coordenadas[2][0]}
+        };
+        centroCirculo = multiplicacaoMatrizes(matrizRotacao,centroCirculo);
+        System.arraycopy(centroCirculo,0,figuraTransformada.coordenadas,0,centroCirculo.length);
         return figuraTransformada;
     }
 
@@ -39,18 +45,19 @@ public class Circulo extends Figura {
                 {0f, 1f, dy},
                 {0f, 0f, 1f}
         };
-        figuraTransformada.coordenadas = multiplicacaoMatrizes(matrizTranslacao, figuraTransformada.coordenadas);
+        Float[][] centroCirculo = {
+                {figuraTransformada.coordenadas[0][0]},
+                {figuraTransformada.coordenadas[1][0]},
+                {figuraTransformada.coordenadas[2][0]}
+        };
+        centroCirculo = multiplicacaoMatrizes(matrizTranslacao,centroCirculo);
+        System.arraycopy(centroCirculo,0,figuraTransformada.coordenadas,0,centroCirculo.length);
         return figuraTransformada;
     }
 
     @Override
     public Figura mudarEscala(Figura figuraTransformada, float sx, float sy, float x, float y) {
-        Float[][] matrizMudancaEscala = {
-                {sx, 0f, x-x*sx},
-                {0f, sy, y-y*sy},
-                {0f, 0f, 1f}
-        };
-        figuraTransformada.coordenadas = multiplicacaoMatrizes(matrizMudancaEscala, figuraTransformada.coordenadas);
+        figuraTransformada.coordenadas[0][1] = figuraTransformada.coordenadas[0][1] * sx;
         return figuraTransformada;
     }
 }
