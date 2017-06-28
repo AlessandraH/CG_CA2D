@@ -5,7 +5,9 @@ import com.badlogic.gdx.*;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
+import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
+import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.math.Vector3;
@@ -20,6 +22,8 @@ import java.util.ArrayList;
 public class CA2D extends ApplicationAdapter implements ApplicationListener {
     SpriteBatch batch;
     OrthographicCamera camera;
+    //Texture img;
+    //Sprite sprite;
     Stage stage;
     ArrayList<Figura> objetos = new ArrayList<Figura>();
     ShapeRenderer renderizador;
@@ -44,6 +48,9 @@ public class CA2D extends ApplicationAdapter implements ApplicationListener {
         camera = new OrthographicCamera(Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
         camera.setToOrtho(false);
         camera.update();
+
+        //img = new Texture(Gdx.files.internal("assets/ca2d.png"));
+        //sprite = new Sprite(img);
 
         batch = new SpriteBatch();
 
@@ -82,7 +89,7 @@ public class CA2D extends ApplicationAdapter implements ApplicationListener {
                 } else if (rotacionando && !pegandoCoordenadas) {
                     if (figuraTransformar.desenho == 1) {
                         figuraTransformar = new Circulo(1).transformarEmCoordenadasHomogeneas(figuraTransformar);
-                        figuraTransformar = new Circulo(1).rotacionar(figuraTransformar,angulo,x,y);
+                        figuraTransformar = new Circulo(1).rotacionar(figuraTransformar, angulo, x, y);
                     } else {
                         figuraTransformar = figuraTransformar.transformarEmCoordenadasHomogeneas(figuraTransformar);
                         figuraTransformar = figuraTransformar.rotacionar(figuraTransformar, angulo, x, y);
@@ -92,7 +99,7 @@ public class CA2D extends ApplicationAdapter implements ApplicationListener {
                 } else if (mudandoEscala && !pegandoCoordenadas) {
                     if (figuraTransformar.desenho == 1) {
                         figuraTransformar = new Circulo(1).transformarEmCoordenadasHomogeneas(figuraTransformar);
-                        figuraTransformar = new Circulo(1).mudarEscala(figuraTransformar,s,s,x,y);
+                        figuraTransformar = new Circulo(1).mudarEscala(figuraTransformar, s, s, x, y);
                     } else {
                         figuraTransformar = figuraTransformar.transformarEmCoordenadasHomogeneas(figuraTransformar);
                         figuraTransformar = figuraTransformar.mudarEscala(figuraTransformar, s, s, x, y);
@@ -101,8 +108,7 @@ public class CA2D extends ApplicationAdapter implements ApplicationListener {
                     inicializaVariaveis();
                 } else if (transladando) {
                     if (figuraTransformar.desenho == 1) {
-                        figuraTransformar = new Circulo(1).transformarEmCoordenadasHomogeneas(figuraTransformar);
-                        figuraTransformar = new Circulo(1).transladar(figuraTransformar,x,y);
+                        figuraTransformar = new Circulo(1).transladar(figuraTransformar, x, y);
                     } else {
                         figuraTransformar = figuraTransformar.transformarEmCoordenadasHomogeneas(figuraTransformar);
                         figuraTransformar = figuraTransformar.transladar(figuraTransformar, x - figuraTransformar.coordenadas[0][0], y - figuraTransformar.coordenadas[1][0]);
@@ -130,6 +136,7 @@ public class CA2D extends ApplicationAdapter implements ApplicationListener {
         renderizador.end();
 
         batch.begin();
+        //sprite.draw(batch,0.3f);
         verificaTeclaPressionada();
         if (terminal)
             fonte.draw(batch, terminalmsg + text, 0, 700);
@@ -139,6 +146,7 @@ public class CA2D extends ApplicationAdapter implements ApplicationListener {
 
     @Override
     public void dispose() {
+        //img.dispose();
         batch.dispose();
     }
 
@@ -198,11 +206,11 @@ public class CA2D extends ApplicationAdapter implements ApplicationListener {
                 pegandoCoordenadas = true;
                 text = "";
                 if (rotacionando) {
-                    pegandoCoordenadas = true;
+                    //pegandoCoordenadas = true;
                     terminalmsg = "Digite o angulo de rotação: ";
                     fonte.draw(batch, terminalmsg, 0, 700);
                 } else if (mudandoEscala) {
-                    pegandoCoordenadas = true;
+                    //pegandoCoordenadas = true;
                     terminalmsg = "Digite o valor de escala: ";
                     fonte.draw(batch, terminalmsg, 0, 700);
                 }

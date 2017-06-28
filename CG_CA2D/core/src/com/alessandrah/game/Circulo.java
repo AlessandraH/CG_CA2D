@@ -22,10 +22,15 @@ public class Circulo extends Figura {
 
     @Override
     public Figura rotacionar(Figura figuraTransformada, float angulo, float x, float y) {
-        double anguloRadiano = (Math.PI/180) * angulo;
+        Float anguloRadiano = (float) Math.toRadians(angulo);
+        Float[][] matrizTranslacao = {
+                {1f, 0f, x},
+                {0f, 1f, y},
+                {0f, 0f, 1f}
+        };
         Float[][] matrizRotacao = {
-                {(float)Math.cos(anguloRadiano), (float)-Math.sin(anguloRadiano), (float)(y*Math.sin(anguloRadiano)-x*Math.cos(anguloRadiano))},
-                {(float)Math.sin(anguloRadiano), (float)Math.cos(anguloRadiano), (float)(-x*Math.sin(anguloRadiano)-y*Math.cos(anguloRadiano))},
+                {(float) Math.cos(anguloRadiano), (float) -Math.sin(anguloRadiano), (float) (y * Math.sin(anguloRadiano) - x * Math.cos(anguloRadiano))},
+                {(float) Math.sin(anguloRadiano), (float) Math.cos(anguloRadiano), (float) (-x * Math.sin(anguloRadiano) - y * Math.cos(anguloRadiano))},
                 {0f, 0f, 1f}
         };
         Float[][] centroCirculo = {
@@ -33,25 +38,16 @@ public class Circulo extends Figura {
                 {figuraTransformada.coordenadas[1][0]},
                 {figuraTransformada.coordenadas[2][0]}
         };
-        centroCirculo = multiplicacaoMatrizes(matrizRotacao,centroCirculo);
-        System.arraycopy(centroCirculo,0,figuraTransformada.coordenadas,0,centroCirculo.length);
+        centroCirculo = multiplicacaoMatrizes(matrizRotacao, centroCirculo);
+        centroCirculo = multiplicacaoMatrizes(matrizTranslacao, centroCirculo);
+        figuraTransformada.coordenadas = copiaMatrizes(centroCirculo, figuraTransformada.coordenadas, 2, 1);
         return figuraTransformada;
     }
 
     @Override
     public Figura transladar(Figura figuraTransformada, float dx, float dy) {
-        Float[][] matrizTranslacao = {
-                {1f, 0f, dx},
-                {0f, 1f, dy},
-                {0f, 0f, 1f}
-        };
-        Float[][] centroCirculo = {
-                {figuraTransformada.coordenadas[0][0]},
-                {figuraTransformada.coordenadas[1][0]},
-                {figuraTransformada.coordenadas[2][0]}
-        };
-        centroCirculo = multiplicacaoMatrizes(matrizTranslacao,centroCirculo);
-        System.arraycopy(centroCirculo,0,figuraTransformada.coordenadas,0,centroCirculo.length);
+        figuraTransformada.coordenadas[0][0] = dx;
+        figuraTransformada.coordenadas[1][0] = dy;
         return figuraTransformada;
     }
 
