@@ -132,7 +132,7 @@ public class CA2D extends ApplicationAdapter implements ApplicationListener {
         batch.begin();
         verificaTeclaPressionada();
         if (terminal)
-            fonte.draw(batch, terminalmsg + text, 0, 250);
+            fonte.draw(batch, terminalmsg + text, 0, 700);
 
         batch.end();
     }
@@ -177,8 +177,8 @@ public class CA2D extends ApplicationAdapter implements ApplicationListener {
         if (!terminal && Gdx.input.isKeyJustPressed(Input.Keys.ENTER)) {
             terminal = true;
         } else if (terminal && Gdx.input.isKeyJustPressed(Input.Keys.ENTER)) {
-            indice = Integer.parseInt(text.trim()) - 1;
             if (deletando) {
+                indice = Integer.parseInt(text.trim()) - 1;
                 objetos.remove(indice);
                 inicializaVariaveis();
             } else if (pegandoCoordenadas) {
@@ -192,6 +192,7 @@ public class CA2D extends ApplicationAdapter implements ApplicationListener {
                     pegandoCoordenadas = false;
                 }
             } else if (rotacionando || transladando || mudandoEscala) {
+                indice = Integer.parseInt(text.trim()) - 1;
                 figuraTransformar = new Figura();
                 figuraTransformar = objetos.get(indice);
                 pegandoCoordenadas = true;
@@ -199,11 +200,11 @@ public class CA2D extends ApplicationAdapter implements ApplicationListener {
                 if (rotacionando) {
                     pegandoCoordenadas = true;
                     terminalmsg = "Digite o angulo de rotação: ";
-                    fonte.draw(batch, terminalmsg, 0, 250);
+                    fonte.draw(batch, terminalmsg, 0, 700);
                 } else if (mudandoEscala) {
                     pegandoCoordenadas = true;
                     terminalmsg = "Digite o valor de escala: ";
-                    fonte.draw(batch, terminalmsg, 0, 250);
+                    fonte.draw(batch, terminalmsg, 0, 700);
                 }
             }
         }
@@ -261,7 +262,7 @@ public class CA2D extends ApplicationAdapter implements ApplicationListener {
 
     public void exibeTerminal() {
         terminalmsg = exibeListaObjetos();
-        fonte.draw(batch, terminalmsg, 0, 250);
+        fonte.draw(batch, terminalmsg, 0, 700);
     }
 
     public String exibeListaObjetos() {

@@ -1,0 +1,17 @@
+CA2D - Instruções de uso
+
+Desenho:
+- Para desenhar um CÍRCULO, pressione <1> e, em seguida, clique em dois pontos (o primeiro clique determinará o centro do círculo, e o segundo servirá para o cálculo do raio);
+- Para desenhar uma RETA, pressione <2> e, em seguida, clique em dois pontos, que determinarão o início e o fim da reta;
+- Para desenhar um TRIÂNGULO, pressione <3> e, em seguida, clique em três pontos, que determinarão os vértices do triângulo;
+- Para desenhar um QUADRILÁTERO, pressione <4> e, em seguida, clique em quatro pontos, que determinarão os vértices do quadrilátero.
+
+Transformações 2D:
+- Para realizar uma MUDANÇA DE ESCALA, pressione <F1>. Em seguida, digite o número correspondente, da lista, da figura que deseja realizar a transformação. Depois, insira o valor de escala. Por fim, clique em um ponto que servirá de referência para a transformação;
+- Para realizar uma ROTAÇÃO, pressione <F2>. Em seguida, digite o número correspondente, da lista, da figura que deseja realizar a transformação. Depois, digite o ângulo, em graus. Por fim, clique em um ponto que servirá de referência para a transformação;
+- Para realizar uma TRANSLAÇÃO, pressione <F3>. Em seguida, digite o número correspondente, da lista, da figura que deseja realizar a transformação. Por fim, clique em um ponto que servirá de referência para a transformação.
+
+Outras operações:
+- Para APAGAR UMA FIGURA, pressione <backspace>. Em seguida, digite o número correspondente, da lista, da figura que deseja realizar apagar;
+- Para APAGAR TODAS AS FIGURAS (CLEAR), pressione <0>;
+- Para SAIR, pressione <ALT+F4>.
