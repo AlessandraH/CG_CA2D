@@ -15,3 +15,9 @@ Outras operações:
 - Para APAGAR UMA FIGURA, pressione <backspace>. Em seguida, digite o número correspondente, da lista, da figura que deseja realizar apagar;
 - Para APAGAR TODAS AS FIGURAS (CLEAR), pressione <0>;
 - Para SAIR, pressione <ALT+F4>.
+
+Observações:
+- A translação é feita em relação ao primeiro vértice (primeiro ponto clicado) no momento da criação da figura;
+- Se a figura a ser selecionada não for especificada, a primeira figura será selecionada;
+- Se o ângulo da rotação não for especificado, o ângulo será 45 graus;
+- Se a escala da mudança de escala não for especificada, a escala será 2. 
