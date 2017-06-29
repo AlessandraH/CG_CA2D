@@ -184,6 +184,8 @@ public class CA2D extends ApplicationAdapter implements ApplicationListener {
 
         if (!terminal && Gdx.input.isKeyJustPressed(Input.Keys.ENTER)) {
             terminal = true;
+            terminalmsg = exibeInstrucoes();
+            fonte.draw(batch, terminalmsg, 0, 700);
         } else if (terminal && Gdx.input.isKeyJustPressed(Input.Keys.ENTER)) {
             if (deletando) {
                 indice = Integer.parseInt(text.trim()) - 1;
@@ -214,6 +216,8 @@ public class CA2D extends ApplicationAdapter implements ApplicationListener {
                     terminalmsg = "Digite o valor de escala: ";
                     fonte.draw(batch, terminalmsg, 0, 700);
                 }
+            } else {
+                terminal = false;
             }
         }
 
@@ -360,5 +364,31 @@ public class CA2D extends ApplicationAdapter implements ApplicationListener {
                 }
             }
         }
+    }
+
+    public String exibeInstrucoes() {
+        String instrucoes = "";
+        instrucoes += "CA2D - Instruções de uso\n\n";
+        instrucoes += "Desenho:\n";
+        instrucoes += "- Para desenhar um CÍRCULO, pressione <1> e, em seguida, clique em dois pontos \n\t(o primeiro clique determinará o centro do círculo, e o segundo servirá para o cálculo do raio);\n";
+        instrucoes += "- Para desenhar uma RETA, pressione <2> e, em seguida, clique em dois pontos, \n\tque determinarão o início e o fim da reta;\n";
+        instrucoes += "- Para desenhar um TRIÂNGULO, pressione <3> e, em seguida, clique em três pontos, \n\tque determinarão os vértices do triângulo;\n";
+        instrucoes += "- Para desenhar um QUADRILÁTERO, pressione <4> e, em seguida, clique em quatro pontos, \n\tque determinarão os vértices do quadrilátero.\n\n";
+        instrucoes += "Transformações 2D:\n";
+        instrucoes += "- Para realizar uma MUDANÇA DE ESCALA, pressione <F1>. " +
+                "\n\tEm seguida, digite o número correspondente, da lista, da figura que deseja realizar a transformação. " +
+                "\n\tDepois, insira o valor de escala. Por fim, clique em um ponto que servirá de referência para a transformação;\n";
+        instrucoes += "- Para realizar uma ROTAÇÃO, pressione <F2>. " +
+                "\n\tEm seguida, digite o número correspondente, da lista, da figura que deseja realizar a transformação." +
+                "\n\tDepois, digite o ângulo, em graus. Por fim, clique em um ponto que servirá de referência para a transformação;\n";
+        instrucoes += "- Para realizar uma TRANSLAÇÃO, pressione <F3>. " +
+                "\n\tEm seguida, digite o número correspondente, da lista, da figura que deseja realizar a transformação. " +
+                "\n\tPor fim, clique em um ponto que servirá de referência para a transformação.\n\n";
+        instrucoes += "Outras operações:\n";
+        instrucoes += "- Para APAGAR APENAS UMA FIGURA, pressione <backspace>. " +
+                "\n\tEm seguida, digite o número correspondente, da lista, da figura que deseja realizar apagar;\n";
+        instrucoes += "- Para APAGAR TODAS AS FIGURAS (CLEAR), pressione <0>;\n";
+        instrucoes += "- Para SAIR, pressione <ALT+F4>.";
+        return instrucoes;
     }
 }
