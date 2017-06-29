@@ -167,6 +167,7 @@ public class CA2D extends ApplicationAdapter implements ApplicationListener {
         text = "";
         terminalmsg = "";
         indice = -1;
+        clique = 0;
     }
 
 
