@@ -189,7 +189,7 @@ public class CA2D extends ApplicationAdapter implements ApplicationListener {
             fonte.draw(batch, terminalmsg, 5, 750);
         } else if (terminal && Gdx.input.isKeyJustPressed(Input.Keys.ENTER)) {
             if (deletando) {
-                if (text.length()==1) {
+                if (text.length()==1 || Integer.parseInt(text.trim())>objetos.size()) {
                     indice = 0;
                 } else {
                     indice = Integer.parseInt(text.trim()) - 1;
@@ -215,7 +215,7 @@ public class CA2D extends ApplicationAdapter implements ApplicationListener {
                     pegandoCoordenadas = false;
                 }
             } else if (rotacionando || transladando || mudandoEscala) {
-                if (text.length()==1) {
+                if (text.length()==1 || Integer.parseInt(text.trim())>objetos.size()) {
                     indice = 0;
                 } else {
                     indice = Integer.parseInt(text.trim()) - 1;
